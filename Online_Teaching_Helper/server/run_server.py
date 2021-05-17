@@ -1,4 +1,9 @@
 # -*-coding:utf-8-*-
+
+# 功能：服务器端，负责接受客户端请求，和DB交流
+# 该数据库时这个老重点改，最后改数据库时用本子时刻备忘
+# 需要加入教师端需要加入多线程来管理，放在后面实现
+
 from flask import Flask
 from do_with_DB.do_with_db import DB_opera
 app = Flask(__name__)

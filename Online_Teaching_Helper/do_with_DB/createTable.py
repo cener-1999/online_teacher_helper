@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+# 功能：建数据库
+# 备注：底下几个条代码去注释，只需要运行一遍
+# 需要修改
+
 import enum
 
 import pymysql

@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+
+# 功能：根据表名找到表本身
+# 对数据库进行重构之后应该不需要了，但是写得挺好的，留着看看
+
 from sqlalchemy.ext.automap import automap_base
 from do_with_DB.Session import get_session
 from sqlalchemy.ext.declarative import DeclarativeMeta

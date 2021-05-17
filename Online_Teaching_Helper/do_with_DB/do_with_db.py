@@ -1,4 +1,6 @@
 # -*-coding:utf-8-*-
+# 提供数据库方法，与server搞定相关，修改时注意参数和返回值
+# 需要修改
 
 from sqlalchemy import func
 from sqlalchemy.dialects.mysql import pymysql

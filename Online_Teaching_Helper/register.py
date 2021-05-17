@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+
+# 功能：注册
+# 这部分应该不需要改变
 import sys
 import requests
 from do_with_DB import do_with_db

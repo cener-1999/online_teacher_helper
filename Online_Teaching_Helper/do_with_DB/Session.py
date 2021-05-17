@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+# 功能：与数据库操作需要用session，只是把方法打包
+# 不需要动
+
 import pymysql
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
