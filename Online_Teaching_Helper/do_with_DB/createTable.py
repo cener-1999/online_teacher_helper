@@ -12,7 +12,8 @@ from sqlalchemy.orm import sessionmaker
 from do_with_DB.Session import get_session
 from sqlalchemy.sql import func
 
-engine = create_engine('mysql+pymysql://root:nbuser@localhost:3306/online_teaching_helper?charset=utf8', echo=True)
+
+engine = create_engine('mysql+pymysql://root:nbuser@localhost:3306/OTH?charset=utf8', echo=True)
 # 声明映射
 Base = declarative_base()
 #映射声明，基类
@@ -23,6 +24,15 @@ session=get_session()
 class RoleEnum(enum.Enum):
     teacher=1
     student=2
+
+class moodEnum(enum.Enum):
+    angry=1
+    disgust=2
+    scared=3
+    happy=4
+    sad=5
+    surprised=6
+    neutral=7
 
 class User(Base):
     __tablename__='USER'

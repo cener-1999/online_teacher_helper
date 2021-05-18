@@ -54,19 +54,20 @@ class DB_opera():
         session.close()
         return False
 
-    def begin_class(self,class_id):#beging a class
-        session = get_session()
-        reports_obj = Reports(classID=class_id)
-        session.add(reports_obj)
-        session.commit()
-        """建表"""
-        reportid=reports_obj.reportID#原来这样就可以获得新建项目的主键了吗
-        print('newID is',reportid)
-        create_report=Create.create_report(reportid)
-        create_report.metadata.create_all(engine)
-        session.close()
-        return True
+    # def begin_class(self,class_id):#beging a class
+    #     session = get_session()
+    #     reports_obj = Reports(classID=class_id)
+    #     session.add(reports_obj)
+    #     session.commit()
+    #     """建表"""
+    #     reportid=reports_obj.reportID#原来这样就可以获得新建项目的主键了吗
+    #     print('newID is',reportid)
+    #     create_report=Create.create_report(reportid)
+    #     create_report.metadata.create_all(engine)
+    #     session.close()
+    #     return True
 
+#新建课程，和Class交互，存老师id,课程id,课程名称
     def new_class(self,class_id, class_name, teacher_id):
         session = get_session()
         class_id=int(class_id)
@@ -83,6 +84,9 @@ class DB_opera():
         session.close()
         return False
 
+#不要dbmap
+#和CS表交互，数据库没问题
+#改方法
     def join_class(self,class_id,student_id):
         student_id=int(student_id)
         session=get_session()
@@ -95,6 +99,7 @@ class DB_opera():
         session.commit()
         session.close()
 
+#找老师教了什么课程，返回列表
     def find_teahcer_class(self,teacher_id):
         classlist=[]
         session=get_session()
