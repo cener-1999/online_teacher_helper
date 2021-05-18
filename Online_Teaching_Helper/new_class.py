@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+
+# 功能：新建课程
+# 不修改
 import sys
 import requests
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QPixmap

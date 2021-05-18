@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+# 功能：老师端的功能跳转和数据显示
+# 注意在涉及数据库的地方try expect
+# 然后也是数据导出
+
 import sys
 import config
 import requests

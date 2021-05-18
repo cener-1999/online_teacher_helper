@@ -1,5 +1,9 @@
 # -*-coding:utf-8-*-
-# -*-coding:utf-8-*-
+
+# 功能：主界面，提供功能调整和基本的数据管理
+# 修改：记得给每个学生分配自习室，并告知
+# 数据导出功能，应该不难做到
+
 import sys
 import requests
 import config

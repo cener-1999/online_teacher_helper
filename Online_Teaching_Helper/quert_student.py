@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+# 学生的查询自己记录的功能
+# t c
+
 import sys
 import requests
 import config

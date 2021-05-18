@@ -1,3 +1,8 @@
+# 功能：进入教室，检查改教室是否存在
+#注意用try-except防止强退
+# 应该新建一个线程，加入后教师端可以显示
+#
+
 import sys
 import requests
 import config

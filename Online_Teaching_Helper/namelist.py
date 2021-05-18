@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+# 功能：展示花名册
+# 修改：try: except
+
 import sys
 import config
 import requests

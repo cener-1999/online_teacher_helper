@@ -1,4 +1,9 @@
 # -*-coding:utf-8-*-
+# 功能：表情识别
+# 要改的：时间统计
+# 把表情识别的标签存下来，算值，或者取比例最大的标签，算法的核心部分
+# 在结束时应该生成一条record并且入库
+#
 import requests
 import config
 from sys import argv

@@ -1,4 +1,7 @@
 # -*-coding:utf-8-*-
+
+# 老师的查询功能
+# t c
 import sys
 import requests
 import config

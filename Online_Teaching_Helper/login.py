@@ -1,3 +1,6 @@
+# 功能：登录
+# 有时间改一下登录部分的是否自动登录，正则表达式之类的，估计没时间
+
 import sys
 import requests
 from PyQt5.QtGui import QKeyEvent, QKeySequence, QPixmap

@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+
+# 功能：应该是一个线程管理器，可以统一结束线程，可以显示子线程的信息，可以统计
+# 时间模块已经很好实现
+
 import sys
 import config
 import requests
