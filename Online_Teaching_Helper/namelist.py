@@ -57,19 +57,22 @@ class Namelist(QDialog,Ui_Dialog):
         classID=self.lineEdit.text()
         nameList_url = 'http://{}:5000/namelist/{}'
         url = nameList_url.format(config.IP, classID)
-        response = requests.get(url)
-        d = response.json()
-        # 填充表格
-        # row=self.classTable
-        row = 0
-        clu = 1
-        for key in d:
-            t = d[key]
-            for i in range(2):
-                item = QStandardItem(str(t[i]))
-                self.class_table_model.setItem(row, i, item)
-            row += 1
-        self.classTable.setModel(self.class_table_model)
+        try:
+            response = requests.get(url)
+            d = response.json()
+            # 填充表格
+            # row=self.classTable
+            row = 0
+            clu = 1
+            for key in d:
+                t = d[key]
+                for i in range(2):
+                    item = QStandardItem(str(t[i]))
+                    self.class_table_model.setItem(row, i, item)
+                row += 1
+            self.classTable.setModel(self.class_table_model)
+        except:
+            print('Wrong!')
 
 if __name__ == "__main__":
 

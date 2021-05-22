@@ -51,16 +51,19 @@ class Query_teacher(QDialog,Ui_Dialog):
         class_id = self.classID_Edit.text()
         query_history_by_teacher_url = 'http://{}:5000/history/class/{}'
         url = query_history_by_teacher_url.format(config.IP, class_id)
-        response = requests.get(url)
-        d=response.json()
-        print(d)
-        row=self.classTable
-        row=0
-        for key in d:
-            self.class_table_model.setItem(row,0,QStandardItem(key))
-            self.class_table_model.setItem(row,1, QStandardItem(d[key]))
-            row+=1
+        try:
+            response = requests.get(url)
+            d=response.json()
+            print(d)
+            row=self.classTable
+            row=0
+            for key in d:
+                self.class_table_model.setItem(row,0,QStandardItem(key))
+                self.class_table_model.setItem(row,1, QStandardItem(d[key]))
+                row+=1
         #self.classTable.setModel(self.class_table_mode)
+        except:
+            print('优雅的报错')
 
     def clear(self):
         self.classTable.clearSpans()

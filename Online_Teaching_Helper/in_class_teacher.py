@@ -40,19 +40,22 @@ class In_class_teacher(QDialog,Ui_Dialog):
         reportID=6
         showsign_url = 'http://{}:5000/sign/{}'
         url = showsign_url.format(config.IP, reportID)
-        response = requests.get(url)
-        d = response.json()
-        # 填充表格
-        # row=self.classTable
-        row = 0
-        clu = 1
-        for key in d:
-            t = d[key]
-            for i in range(2):
-                item = QStandardItem(str(t[i]))
-                self.class_table_model.setItem(row, i, item)
-            row += 1
-        self.signinTable.setModel(self.class_table_model)
+        try:
+            response = requests.get(url)
+            d = response.json()
+            # 填充表格
+            # row=self.classTable
+            row = 0
+            clu = 1
+            for key in d:
+                t = d[key]
+                for i in range(2):
+                    item = QStandardItem(str(t[i]))
+                    self.class_table_model.setItem(row, i, item)
+                row += 1
+            self.signinTable.setModel(self.class_table_model)
+        except:
+            print('Wrong!')
 
 
     def eventFilter(self, object, event):

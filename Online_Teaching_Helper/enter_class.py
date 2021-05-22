@@ -44,17 +44,20 @@ class Enterclass(QDialog,Ui_EnterClass):
         '''DB查找教室码，把该学生加入课堂, studentID由上一个界面得到'''
         enterclass_url = 'http://{}:5000/class/sign/{}/{}'
         url = enterclass_url.format(config.IP, reportID, studentID)
-        response = requests.get(url)
-        result = response.json().get('result')
-        if result:
-            print("ok")
-            win = inClass()
-            self.winlist.append(win)  ##注：没有这句，是不打开另一个主界面的！
-            win.show()
-            self.close()
-        else:
-            QMessageBox.warning(self, '错误', '输入错误，该课堂不存在！')
+        try:
+            response = requests.get(url)
+            result = response.json().get('result')
+            if result:
+                print("ok")
+                win = inClass()
+                self.winlist.append(win)  ##注：没有这句，是不打开另一个主界面的！
+                win.show()
+                self.close()
+            else:
+                QMessageBox.warning(self, '错误', '输入错误，该课堂不存在！')
             return False
+        except:
+            print('Wrong!')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

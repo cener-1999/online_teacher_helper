@@ -12,7 +12,7 @@ def get_session():
     :return: session 对象
     """
     # 创建Session
-    connect_str = 'mysql+pymysql://root:nbuser@localhost:3306/online_teaching_helper?charset=utf8mb4'
+    connect_str = 'mysql+pymysql://root:nbuser@localhost:3306/OTH?charset=utf8mb4'
     Session = sessionmaker()
     # 创建连接引擎
     engine = create_engine(connect_str, echo=True)

@@ -68,16 +68,18 @@ class Class(Base):
 
 class Class_Students(Base):
     __tablename__='Class_Students'
-    Class_ID=Column(Integer,ForeignKey(Class.ClassID),primary_key=True)
+    index=Column(Integer,autoincrement=True,primary_key=True)
+    Class_ID=Column(Integer,ForeignKey(Class.ClassID))
     StudentID=Column(Integer, ForeignKey(Student.ID))
 
 class Reports(Base):
     __tablename__="Reports"
-    reportID=Column(Integer,autoincrement=True,primary_key=True)
+    ReportID=Column(Integer,autoincrement=True,primary_key=True)
     classID=Column(Integer,ForeignKey(Class.ClassID))
     StudentID=Column(Integer, ForeignKey(Student.ID))
     grade=Column(Integer,default=0)
-    select=Column(Enum(MoodEnum))
-    create_time = Column(DateTime,default=func.now())
+    Select=Column(Enum(MoodEnum))
+    Create_time = Column(DateTime,default=func.now())
 
-
+#建表
+Base.metadata.create_all(engine)

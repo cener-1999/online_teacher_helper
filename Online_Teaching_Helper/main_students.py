@@ -44,36 +44,42 @@ class Main_Students(QMainWindow,Ui_MainWindow):
         self.reportsTable.setModel(self.reports_table_model)
         self.reportsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        studentID=2020100001
+        studentID=2021000001
         teacherInform_url = 'http://{}:5000/inform/student/{}'
         url = teacherInform_url.format(config.IP, studentID)
-        response = requests.get(url)
-        d=response.json()
-        #填充表格
-        #row=self.classTable
-        row=0
-        clu=1
-        for key in d:
-            t=d[key]
-            for i in range(3):
-                item=QStandardItem(str(t[i]))
-                self.class_table_model.setItem(row,i,item)
-            row+=1
-        self.classTable.setModel(self.class_table_model)
+        try:
+            response = requests.get(url)
+            d=response.json()
+            #填充表格
+            #row=self.classTable
+            row=0
+            clu=1
+            for key in d:
+                t=d[key]
+                for i in range(3):
+                    item=QStandardItem(str(t[i]))
+                    self.class_table_model.setItem(row,i,item)
+                row+=1
+            self.classTable.setModel(self.class_table_model)
+        except:
+            print('Wrong whys!')
 
         show_brief_history_student_url = 'http://{}:5000/history/student/brief/{}'
         url = show_brief_history_student_url.format(config.IP, studentID)
-        response = requests.get(url)
-        d_=response.json()
-        row=0
-        clu=1
-        for key in d_:
-            t=d_[key]
-            for i in range(3):
-                item=QStandardItem(str(t[i]))
-                self.reports_table_model.setItem(row,i,item)
-            row+=1
-        self.reportsTable.setModel(self.reports_table_model)
+        try:
+            response = requests.get(url)
+            d_=response.json()
+            row=0
+            clu=1
+            for key in d_:
+                t=d_[key]
+                for i in range(3):
+                    item=QStandardItem(str(t[i]))
+                    self.reports_table_model.setItem(row,i,item)
+                row+=1
+            self.reportsTable.setModel(self.reports_table_model)
+        except:
+            print('Wrong!')
 
     windowList = []
     #事件过滤器，防止挂掉

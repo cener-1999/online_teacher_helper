@@ -4,16 +4,17 @@
 
 from sqlalchemy import func
 from sqlalchemy.dialects.mysql import pymysql
-from sqlalchemy.orm import DeclarativeMeta
+from sqlalchemy.orm import DeclarativeMeta, session
 from sqlalchemy.sql import exists
 from sqlalchemy import Column, Integer, String, Enum, create_engine, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import text
+from sqlalchemy.sql.expression import select
 from do_with_DB.map import DbSharding
 from do_with_DB.Session import get_session
-from do_with_DB.createTable import User,Teacher,Student,RoleEnum,Class,Reports,ClassList,Create
+from do_with_DB.createTable import Class_Students, User,Teacher,Student,RoleEnum,Class,Reports
 
-engine = create_engine('mysql+pymysql://root:nbuser@localhost:3306/online_teaching_helper?charset=utf8', echo=True)
+engine = create_engine('mysql+pymysql://root:nbuser@localhost:3306/OTH?charset=utf8', echo=True)
 '''数据库从删库到跑路'''
 class DB_opera():
     def login_check(self,id,passward,role):#is ok
@@ -41,7 +42,6 @@ class DB_opera():
             session.add(user_obj)
             session.commit()
             if (role == "teacher"):
-                print('role is ok!')
                 teacher_obj = Teacher(ID=id, name=name)
                 session.add(teacher_obj)
                 session.commit()
@@ -87,35 +87,26 @@ class DB_opera():
 #不要dbmap
 #和CS表交互，数据库没问题
 #改方法
+#修改完成，且通过测试
     def join_class(self,class_id,student_id):
         student_id=int(student_id)
         session=get_session()
-        dbmap=DbSharding()
-        table=dbmap.get_model(str(class_id))
-        join_obj=table(StudentID=student_id)
-        #print(type(table))
-        #print(type(Class))
+        join_obj=Class_Students(Class_ID=class_id,StudentID=student_id)
         session.add(join_obj)
-        session.commit()
+        try:
+            session.commit()
+        except :
+            print('该学生已经在课堂内了')
         session.close()
 
 #找老师教了什么课程，返回列表
     def find_teahcer_class(self,teacher_id):
         classlist=[]
         session=get_session()
-        db_map=DbSharding()
-        teacher_id=int(teacher_id)
-        result=session.query(Class).filter(Class.teacherID==teacher_id).all()
-        for item in result:
-            classlist.append([item.ClassID,item.Class_name])
-        print(classlist)#传递classlist 是list
-        for item in classlist:
-            classmap=db_map.get_model(str(item[0]))
-            sum=session.query(classmap).count()
-            item.append(sum)
-        print(classlist)
-        session.close()
-        #students_sum=session.query()
+        class_row=session.query(Class).filter(Class.teacherID==int(teacher_id))
+        #寻找到多个结果，需要将其取出
+        #for item in class_row:
+            
 
     def sign_in_class(self,report_id,student_id):
         session=get_session()
@@ -238,48 +229,73 @@ class DB_opera():
     def show_inform_student(self,student_id):
         list = []
         session=get_session()
-        dbmap=DbSharding()
-        #第一步，在花名册上找到自己
-        all_class_list=session.query(Class).all()
-        for item in all_class_list:
-            class_id=item.ClassID
-            i=dbmap.get_model(str(class_id))  #一个课程
-            if i:
-                n=session.query(i).filter(i.StudentID==student_id).all()
-                #如果课程表上有自己
-                if n:
-                    the_class=session.query(Class).filter(Class.ClassID==int(class_id)).one()
-                    class_name=the_class.Class_name
-                    teacher=session.query(Teacher).filter(Teacher.ID==the_class.teacherID).one()
-                    teacher_name=teacher.name
-                    list.append((class_id,class_name,teacher_name))
+        students_classes=session.query(Class_Students).filter(Class_Students.StudentID==int(student_id)).all()
+        for item in students_classes:
+            #第一个theclass是表的一列，下一行的class_name是从那一列中取出属性
+            theclass=session.query(Class).filter(Class.ClassID==item.Class_ID).one()
+            class_name=theclass.Class_name
+
+            theteacher1=session.query(Class).filter(Class.ClassID==item.Class_ID).one()
+            theteacher2=session.query(Teacher).filter(Teacher.ID==theteacher1.teacherID).one()
+            teacher_name=theteacher2.name
+            class_id=item.Class_ID
+
+            list.append((class_id,class_name,teacher_name))
         print(list)
         session.close()
         return list
+            
+        # for item in all_class_list:
+        #     class_id=item.ClassID
+        #     i=dbmap.get_model(str(class_id))  #一个课程
+        #     if i:
+        #         n=session.query(i).filter(i.StudentID==student_id).all()
+        #         #如果课程表上有自己
+        #         if n:
+        #             the_class=session.query(Class).filter(Class.ClassID==int(class_id)).one()
+        #             class_name=the_class.Class_name
+        #             teacher=session.query(Teacher).filter(Teacher.ID==the_class.teacherID).one()
+        #             teacher_name=teacher.name
+        #             list.append((class_id,class_name,teacher_name))
+        # print(list)
+        # session.close()
+        # return list
 
     def show_brief_history_student(self,student_id):
         #找到reports表里的所有reportid，按名字找到表，如果表里有studentid，加入元组
         list = []
         session = get_session()
-        dbmap = DbSharding()
-        all_report_list = session.query(Reports).all()
-        for item in all_report_list:
-            report_id = item.reportID
-            i = dbmap.get_model(str(report_id))  # 一个课程
-            if i:
-                n = session.query(i).filter(i.StudentID == student_id).all()
-                # 如果课程表上有自己
-                if n:
-                    myreport=session.query(i).filter(i.StudentID == student_id).one()
-                    mygrade=myreport.grade
-                    myclass=session.query(Reports).filter(Reports.reportID==int(report_id)).one()
-                    class_id=myclass.classID
-                    find_class_name=session.query(Class).filter(Class.ClassID==class_id).one()
-                    class_name = find_class_name.Class_name
-                    list.append((class_id, class_name, mygrade))
-        print(list)
-        session.close()
-        return list
+        student_reports=session.query(Reports).filter(Reports.StudentID==student_id).all()
+        for report in student_reports:  
+            class_id=report.classID
+            mygrade=report.grade
+
+            theclass=session.query(Class).filter(Class.ClassID==report.classID).one()
+            class_name=theclass.Class_name
+
+            list.append((class_id, class_name, mygrade))
+        print(list)  
+        return list  
+
+        # dbmap = DbSharding()
+        # all_report_list = session.query(Reports).all()
+        # for item in all_report_list:
+        #     report_id = item.reportID
+        #     i = dbmap.get_model(str(report_id))  # 一个课程
+        #     if i:
+        #         n = session.query(i).filter(i.StudentID == student_id).all()
+        #         # 如果课程表上有自己
+        #         if n:
+        #             myreport=session.query(i).filter(i.StudentID == student_id).one()
+        #             mygrade=myreport.grade
+        #             myclass=session.query(Reports).filter(Reports.reportID==int(report_id)).one()
+        #             class_id=myclass.classID
+        #             find_class_name=session.query(Class).filter(Class.ClassID==class_id).one()
+        #             class_name = find_class_name.Class_name
+        #             list.append((class_id, class_name, mygrade))
+        # print(list)
+        # session.close()
+        # return list
 
 
 #new_class(1001,"english",222)
@@ -288,7 +304,7 @@ class DB_opera():
 #new_report(1000,101,99)
 
 
-test=DB_opera()
+#test=DB_opera()
 #test.register(102,121,"student","zhangsan")
 #test.login_check(101,154,"student")
 #test.find_teahcer_class(987)

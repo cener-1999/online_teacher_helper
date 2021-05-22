@@ -49,16 +49,19 @@ class Query_stuent(QDialog,Ui_Dialog):
     def query(self): #不健壮，不能输入空和错误
         query_history_by_teacher_url = 'http://{}:5000/history/student/report/{}'
         url = query_history_by_teacher_url.format(config.IP,self.student_id)
-        response = requests.get(url)
-        d=response.json()
-        print(d)
-        row=self.classTable
-        row=0
-        for key in d:
-            self.class_table_model.setItem(row,0,QStandardItem(key))
-            self.class_table_model.setItem(row,1,QStandardItem(str(d[key])))
-            row+=1
-        #self.classTable.setModel(self.class_table_mode)
+        try:
+            response = requests.get(url)
+            d=response.json()
+            print(d)
+            row=self.classTable
+            row=0
+            for key in d:
+                self.class_table_model.setItem(row,0,QStandardItem(key))
+                self.class_table_model.setItem(row,1,QStandardItem(str(d[key])))
+                row+=1
+            #self.classTable.setModel(self.class_table_mode)
+        except:
+            print('Wrong')
 
     def clear(self):
         self.classTable.clearSpans()

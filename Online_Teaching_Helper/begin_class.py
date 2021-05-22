@@ -50,15 +50,18 @@ class Enterclass(QDialog,Ui_EnterClass):
         '''DB查找教室码，把该学生加入课堂'''
         beginclass_url = 'http://{}:5000/class/begin/{}'
         url = beginclass_url.format(config.IP, class_id)
-        response = requests.get(url)
-        result = response.json().get('result')
-        if result:
-            new_dia=In_class_teacher()
-            new_dia.exec_()
-            self.close()
-        else:
-            QMessageBox.warning(self, '错误', '输入错误，该课堂不存在！')
-            return False
+        try:
+            response = requests.get(url)
+            result = response.json().get('result')
+            if result:
+                new_dia=In_class_teacher()
+                new_dia.exec_()
+                self.close()
+            else:
+                QMessageBox.warning(self, '错误', '输入错误，该课堂不存在！')
+                return False
+        except:
+            print('Wrong!')
 
     def new_room(self):
         roomID = self.idEdit.text()
