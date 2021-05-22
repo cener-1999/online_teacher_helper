@@ -41,7 +41,7 @@ class Main_Teacher(QMainWindow,Ui_MainWindow):
         self.reportsTable.setModel(self.reports_table_model)
         self.reportsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        teacherID=110001
+        teacherID=100001
         teacherInform_url = 'http://{}:5000/inform/teacher/{}'
         url = teacherInform_url.format(config.IP, teacherID)
         try:

@@ -76,6 +76,10 @@ class Ui_inClass(object):
         _translate = QtCore.QCoreApplication.translate
         inClass.setWindowTitle(_translate("inClass", "-课堂-"))
         self.groupBox.setTitle(_translate("inClass", "上课中·"))
+        self.timeLable.setVisible(False)
+        self.levelLable.setVisible(False)
+        self.label_2.setVisible(False)
+        self.label_3.setVisible(False)
         self.levelLable.setText(_translate("inClass", "<html><head/><body><p><span style=\" font-size:18pt; font-weight:600; color:#55aaff;\">A</span></p></body></html>"))
         self.timeLable.setText(_translate("inClass", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600; color:#5500ff;\">00:45:00</span></p></body></html>"))
         self.label_2.setText(_translate("inClass", "课堂计时"))

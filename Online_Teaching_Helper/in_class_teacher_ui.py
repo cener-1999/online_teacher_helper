@@ -59,6 +59,7 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "课堂"))
         self.groupBox.setTitle(_translate("Dialog", "讲课中·"))
         self.label.setText(_translate("Dialog", "到课学生"))
+        self.show_timeLable.setDisabled(True)
         self.show_timeLable.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600; color:#0055ff;\">00:45:00</span></p></body></html>"))
         self.endClassBtn.setText(_translate("Dialog", "下课"))
         self.label_3.setText(_translate("Dialog", "到课人数："))

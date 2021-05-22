@@ -19,6 +19,15 @@ class Test():
     def if_can_show_brief_student_report(self,student_id):
         self.db_opera.show_brief_history_student(student_id)
 
+    def if_can_get_inform_teacher(self,teacher_id):
+        self.db_opera.show_inform_teacher(teacher_id)
+
+    def if_can_show_bf_teacher(self,teacher_id):
+        self.db_opera.show_brief_history_teacher(teacher_id)
+
+    def if_can_namelist(self,class_id):
+        self.db_opera.check_namelist(class_id)
+
     # def if_can_new_class(self):
     #     self.db_opera.new_class()
 
@@ -32,4 +41,7 @@ test1=Test()
 #发现问题，CS表会重复，防止重复应该需要触发器检查，但是算了
 test2=Test()
 #test2.if_can_get_student_infor(2021000001)
-test2.if_can_show_brief_student_report(2021000001)
+#test2.if_can_show_brief_student_report(2021000001)
+#test2.if_can_get_inform_teacher(100001)
+#test2.if_can_show_bf_teacher(100001)
+test2.if_can_namelist(1)

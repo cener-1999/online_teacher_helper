@@ -183,48 +183,84 @@ class DB_opera():
     def check_namelist(self,class_id):
         namelist=[]
         session=get_session()
-        dbmap=DbSharding()
-        theclass=dbmap.get_model(str(class_id))
-        row_name_list=session.query(theclass).all()
-        for item in row_name_list:
-            student_id=item.StudentID
-            student=session.query(Student).filter(Student.ID==student_id).all()
-            for item in student:
-                student_name=item.name
-                namelist.append((student_id,student_name))
+        namelist_=session.query(Class_Students).filter(Class_Students.Class_ID==class_id)
+        for student in namelist_:
+            student_id=student.StudentID
+            studentname_=session.query(Student).filter(Student.ID==student_id).one()
+            studentname=studentname_.name
+            namelist.append((student_id,studentname))
         print(namelist)
         session.close()
         return namelist
 
+        # dbmap=DbSharding()
+        # theclass=dbmap.get_model(str(class_id))
+        # row_name_list=session.query(theclass).all()
+        # for item in row_name_list:
+        #     student_id=item.StudentID
+        #     student=session.query(Student).filter(Student.ID==student_id).all()
+        #     for item in student:
+        #         student_name=item.name
+        #         namelist.append((student_id,student_name))
+        # print(namelist)
+        # session.close()
+        # return namelist
+
     def show_inform_teacher(self,teacher_id):
         list = []
         session=get_session()
-        dbmap=DbSharding()
-        result_list=session.query(Class).filter(Class.teacherID==int(teacher_id)).all()
-        for item in result_list:
-            class_id=item.ClassID
+        teachers_classes=session.query(Class).filter(Class.teacherID==int(teacher_id)).all()
+        for item in teachers_classes:
+            #第一个theclass是表的一列，下一行的class_name是从那一列中取出属性
             class_name=item.Class_name
-            findlist=dbmap.get_model(str(class_id))
-            sum=session.query(findlist).count()
-            list.append((class_id,class_name,sum))
+            sum_=session.query(Class_Students).filter(Class_Students.Class_ID==item.ClassID).count()
+            class_id=item.ClassID
+            list.append((class_id,class_name,sum_))
         print(list)
         session.close()
         return list
+        # list = []
+        # session=get_session()
+        # dbmap=DbSharding()
+        # result_list=session.query(Class).filter(Class.teacherID==int(teacher_id)).all()
+        # for item in result_list:
+        #     class_id=item.ClassID
+        #     class_name=item.Class_name
+        #     findlist=dbmap.get_model(str(class_id))
+        #     sum=session.query(findlist).count()
+        #     list.append((class_id,class_name,sum))
+        # print(list)
+        # session.close()
+        # return list
 
     def show_brief_history_teacher(self,teacher_id):#md 意外的顺利啊
+                #找到reports表里的所有reportid，按名字找到表，如果表里有studentid，加入元组
         list = []
         session = get_session()
-        dbmap = DbSharding()
-        result_list = session.query(Class).filter(Class.teacherID == int(teacher_id)).all()
-        for item in result_list:
-            class_id = item.ClassID
-            class_name = item.Class_name
-            report_list=session.query(Reports).filter(Reports.classID==int(class_id)).all()
-            for i in report_list:
-                list.append((class_id,class_name,i.reportID))
-        print(list)
-        session.close()
-        return list
+        teachers_classes=session.query(Class).filter(Class.teacherID==int(teacher_id)).all()
+        for item in teachers_classes:
+            class_id=item.ClassID
+            class_name=item.Class_name
+            reports=session.query(Reports).filter(Reports.classID==item.ClassID).all()
+            for report in reports:
+                report_id=report.ReportID
+                list.append((class_id, class_name, report_id))
+
+        print(list)  
+        return list  
+        # list = []
+        # session = get_session()
+        # dbmap = DbSharding()
+        # result_list = session.query(Class).filter(Class.teacherID == int(teacher_id)).all()
+        # for item in result_list:
+        #     class_id = item.ClassID
+        #     class_name = item.Class_name
+        #     report_list=session.query(Reports).filter(Reports.classID==int(class_id)).all()
+        #     for i in report_list:
+        #         list.append((class_id,class_name,i.reportID))
+        # print(list)
+        # session.close()
+        # return list
 
     def show_inform_student(self,student_id):
         list = []
